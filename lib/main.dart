@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:state_management_riverpod/user.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -17,13 +18,24 @@ final nameProvider = Provider<String>((ref){
   return "Abhireet";
 });
 
+//family provider is used to pass value to providers
+final nameProvider2 = Provider.family<String,String>((ref,name){
+  return "Hello $name";
+});
+
+//passing multiple values to provider with the help of family provider
+//family provider is used to pass value to providers
+final nameProvider3 = Provider.family<String, User>((ref,user){
+  return "Name: ${user.name} Address: ${user.address}";
+});
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MyHomePage2(),
+      home: MyHomePage3(),
     );
   }
 }
@@ -36,7 +48,7 @@ class MyHomePage1 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //ref.wach is used to get the value of created provider
-    final name= ref.watch(nameProvider);
+    final name= ref.watch(nameProvider2("Abhireet"));
     return Scaffold(
       appBar: AppBar(title: Text("Provider"),),
       body: Center(
@@ -89,7 +101,7 @@ class _MyHomePage3State extends ConsumerState<MyHomePage3> {
       print(name);
     }
 
-    final name = ref.watch(nameProvider);
+    final name = ref.watch(nameProvider3(User(name: "Abhireet", address: "NCR")));
 
     return Scaffold(
       appBar: AppBar(title: const Text("Provider"),),
@@ -100,4 +112,3 @@ class _MyHomePage3State extends ConsumerState<MyHomePage3> {
   }
 }
 
-// 2) StateProvider
